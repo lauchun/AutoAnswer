@@ -1,6 +1,7 @@
 package com.lauchun.autoanswer.listener;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
@@ -40,26 +41,22 @@ public class CallReceiver extends PhoneStateListener {
                 + state + " incomingNumber: " + incomingNumber);
         switch (state) {
             case TelephonyManager.CALL_STATE_IDLE:      // 电话挂断
-                if (CallActivity.sCall_op == CallActivity.CALL_OP.AUTO_CALL ) {
-                    try {
-                        Thread.sleep(4 * 1000);
+                if (CallActivity.sCall_op == CallActivity.CALL_OP.AUTO_CALL) {
+                    for (int i = 1; i < PhoneUtil.getCallTimes(); i++) {
+                        SystemClock.sleep(4 * 1000);
                         Log.d("PhoneListen", "CallReceiver onCallStateChanged callPhone");
-                        PhoneUtil.callPhone(mContext,PhoneUtil.getPhoneNum());
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        PhoneUtil.callPhone(mContext, PhoneUtil.getPhoneNum());
                     }
+                    CallActivity.sCall_op = CallActivity.CALL_OP.NONE;
                 }
             case TelephonyManager.CALL_STATE_RINGING:   // 电话响铃
                 if (CallActivity.sCall_op == CallActivity.CALL_OP.CALL_ACCEPT) {
                     Log.d("PhoneListen", "CallReceiver onCallStateChanged acceptCall");
-                    try {
-                        Thread.sleep(2 * 1000);
-                        PhoneUtil.acceptCall(mContext);
-                        Thread.sleep(5 * 1000);
-                        CallActivity.sCall_op = CallActivity.CALL_OP.CALL_END;
-                    } catch (InterruptedException ie) {
-                        Thread.currentThread().interrupt();
-                    }
+                    SystemClock.sleep(2 * 1000);
+                    PhoneUtil.acceptCall(mContext);
+                    SystemClock.sleep(4 * 1000);
+                    CallActivity.sCall_op = CallActivity.CALL_OP.CALL_END;
+
                 } else {
                     return;
                 }

@@ -21,6 +21,7 @@ import java.lang.reflect.Method;
 public class PhoneUtil {
 
     static String phoneNum = null;
+    static int callTimes = 0;
 
     public static void acceptCall(Context context) {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ANSWER_PHONE_CALLS) != PackageManager.PERMISSION_GRANTED) {
@@ -92,5 +93,14 @@ public class PhoneUtil {
 
     public static String getPhoneNum() {
         return phoneNum;
+    }
+
+    public static int getCallTimes() {
+        return callTimes;
+    }
+
+    public static int setCallTimes(int i) {
+        callTimes = i;
+        return callTimes;
     }
 }

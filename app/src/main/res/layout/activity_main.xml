@@ -3,57 +3,77 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:background="@color/white"
         android:orientation="vertical"
         android:padding="5dp"
-        tools:context=".MainActivity"
-        android:background="@color/white">
+        tools:context=".MainActivity">
 
     <TextView
             android:layout_width="match_parent"
             android:layout_height="50sp"
-            android:textStyle="bold"
-            android:textSize="30sp"
             android:background="@color/white"
+            android:text="SIM卡信息"
             android:textColor="@color/black"
-            android:text="SIM卡信息" />
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
     <TextView
             android:id="@+id/tv_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textColor="@color/white"
             android:layout_marginVertical="5dp"
-            android:background="@color/colorPrimary"/>
+            android:background="@color/colorPrimary"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
 
     <EditText
             android:id="@+id/tv_num"
             android:layout_width="match_parent"
             android:layout_height="150px"
-            android:numeric="integer"
-            android:maxLength="11"
-            android:textColor="@color/black"
-            android:singleLine="true"
-            android:background="@drawable/edit_bg"
             android:layout_marginVertical="5dp"
-            android:hint="请输入手机号" />
-
-    <Button
-            android:id="@+id/bt_call"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:text="拨打电话"/>
+            android:background="@drawable/edit_bg"
+            android:hint="请输入手机号"
+            android:maxLength="11"
+            android:numeric="integer"
+            android:singleLine="true"
+            android:textColor="@color/black" />
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
+        <Button
+                android:id="@+id/bt_call"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:text="拨打电话" />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="选择拨打次数："
+                android:textColor="@color/black"/>
+
+        <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:id="@+id/times"
+                android:entries="@array/times"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
         <Button
                 android:id="@+id/bt_acceptcall"
                 android:layout_width="120dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
-                android:text="开启自动接听"/>
+                android:text="开启自动接听" />
 
         <Button
                 android:id="@+id/bt_none"
@@ -68,9 +88,25 @@
             android:id="@+id/tv_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:layout_marginTop="20dp"
-            android:textColor="@color/black"
             android:layout_marginVertical="5dp"
-            android:text="自动接听状态：未开启"/>
+            android:layout_marginTop="20dp"
+            android:text="自动接听状态：未开启"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_times"
+            android:textColor="@color/black"
+            android:layout_marginTop="20dp"
+            android:text="当前设置拨打次数："/>
+
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:id="@+id/bt_update"
+            android:textColor="@color/black"
+            android:text="更新"/>
+
 </LinearLayout>
