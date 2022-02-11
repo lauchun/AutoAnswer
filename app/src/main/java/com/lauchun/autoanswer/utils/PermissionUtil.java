@@ -1,4 +1,4 @@
-package com.lauchun.utils;
+package com.lauchun.autoanswer.utils;
 
 import android.content.Context;
 import android.content.pm.PackageManager;

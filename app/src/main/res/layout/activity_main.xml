@@ -42,5 +42,35 @@
             android:id="@+id/bt_call"
             android:layout_width="100dp"
             android:layout_height="50dp"
-            android:text="打电话"/>
+            android:text="拨打电话"/>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <Button
+                android:id="@+id/bt_acceptcall"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:text="开启自动接听"/>
+
+        <Button
+                android:id="@+id/bt_none"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:text="关闭自动接听" />
+    </LinearLayout>
+
+
+    <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/black"
+            android:layout_marginVertical="5dp"
+            android:text="自动接听状态：未开启"/>
 </LinearLayout>

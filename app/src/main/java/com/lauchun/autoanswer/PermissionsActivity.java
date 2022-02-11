@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 
-import com.lauchun.utils.PermissionUtil;
+import com.lauchun.autoanswer.utils.PermissionUtil;
 
 public class PermissionsActivity extends AppCompatActivity {
 
