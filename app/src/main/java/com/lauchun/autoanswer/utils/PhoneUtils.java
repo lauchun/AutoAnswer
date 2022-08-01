@@ -18,10 +18,12 @@ import java.lang.reflect.Method;
  * @description ：
  * @version: 1.0
  */
-public class PhoneUtil {
+public class PhoneUtils {
 
     static String phoneNum = null;
     static int callTimes = 0;
+    static int acceptTime = 0;
+    static int callTime = 0;
 
     public static void acceptCall(Context context) {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ANSWER_PHONE_CALLS) != PackageManager.PERMISSION_GRANTED) {
@@ -85,7 +87,6 @@ public class PhoneUtil {
 
     private static void AlertDialog(Context context) {
         new AlertDialog.Builder(context)
-                .setTitle("注意")
                 .setMessage("手机号码不能为空！")
                 .setPositiveButton("知道了", null)
                 .show();
@@ -102,5 +103,21 @@ public class PhoneUtil {
     public static int setCallTimes(int i) {
         callTimes = i;
         return callTimes;
+    }
+
+    public static int getAcceptTime() {
+        return acceptTime;
+    }
+
+    public static void setAcceptTime(int acceptTime) {
+        PhoneUtils.acceptTime = acceptTime;
+    }
+
+    public static int getCallTime() {
+        return callTime;
+    }
+
+    public static void setCallTime(int callTime) {
+        PhoneUtils.callTime = callTime + 1;
     }
 }

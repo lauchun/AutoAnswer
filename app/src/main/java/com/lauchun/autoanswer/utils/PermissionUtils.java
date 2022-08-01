@@ -10,10 +10,10 @@ import android.support.v4.content.ContextCompat;
  * @description ：
  * @version: 1.0
  */
-public class PermissionUtil {
+public class PermissionUtils {
     private final Context mContext;
 
-    public PermissionUtil(Context context) {
+    public PermissionUtils(Context context) {
         mContext = context.getApplicationContext();
     }
 

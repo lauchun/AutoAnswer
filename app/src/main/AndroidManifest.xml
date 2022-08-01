@@ -16,7 +16,9 @@
             android:theme="@style/AppTheme"
             android:largeHeap="true">
         <activity android:name=".PermissionsActivity"></activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".CallActivity"/>
+        <activity android:name=".MainActivity"
+                android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

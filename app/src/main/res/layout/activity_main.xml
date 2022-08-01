@@ -38,16 +38,16 @@
             android:singleLine="true"
             android:textColor="@color/black" />
 
+    <Button
+            android:id="@+id/bt_call"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="拨打电话" />
+
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
-        <Button
-                android:id="@+id/bt_call"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:text="拨打电话" />
 
         <TextView
                 android:layout_width="wrap_content"
@@ -56,10 +56,69 @@
                 android:textColor="@color/black"/>
 
         <Spinner
+                android:id="@+id/sp_times"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:id="@+id/times"
                 android:entries="@array/times"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
+                android:text="次"
+                android:textColor="@color/black"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="选择通话时间："
+                android:textColor="@color/black"/>
+
+        <Spinner
+                android:id="@+id/sp_callTime"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:entries="@array/setTime" />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
+                android:text="秒"
+                android:textColor="@color/black"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="选择接听时间："
+                android:textColor="@color/black"/>
+
+        <Spinner
+                android:id="@+id/sp_acceptTime"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:entries="@array/setTime"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
+                android:text="秒"
+                android:textColor="@color/black"/>
 
     </LinearLayout>
 

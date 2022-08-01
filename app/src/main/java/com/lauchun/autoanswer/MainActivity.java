@@ -4,8 +4,12 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
@@ -16,8 +20,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.lauchun.autoanswer.service.CallService;
-import com.lauchun.autoanswer.utils.PermissionUtil;
-import com.lauchun.autoanswer.utils.PhoneUtil;
+import com.lauchun.autoanswer.utils.PermissionUtils;
+import com.lauchun.autoanswer.utils.PhoneUtils;
+import com.lauchun.autoanswer.utils.ServiceUtils;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,7 +45,12 @@ public class MainActivity extends AppCompatActivity {
     private Button bt_acceptcall;
     private Button bt_none;
     private Button bt_update;
-    private Spinner spinner;
+    private Spinner sp_times;
+    private Spinner sp_acceptTime;
+    private Spinner sp_callTime;
+
+    private SubscriptionManager mSubscriptionManager;
+
 
     private TelephonyManager tManager;
     private StringBuilder info;
@@ -51,8 +63,9 @@ public class MainActivity extends AppCompatActivity {
             "TD_SCDMA", "IWLAN", "LTE_CA", "5G"};
 
 
-    private PermissionUtil mPermissionUtil;
+    private PermissionUtils mPermissionUtils;
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,13 +75,15 @@ public class MainActivity extends AppCompatActivity {
         bt_call = findViewById(R.id.bt_call);
         bt_acceptcall = findViewById(R.id.bt_acceptcall);
         bt_none = findViewById(R.id.bt_none);
-        spinner = findViewById(R.id.times);
+        sp_times = findViewById(R.id.sp_times);
+        sp_acceptTime = findViewById(R.id.sp_acceptTime);
+        sp_callTime = findViewById(R.id.sp_callTime);
         tv_times = findViewById(R.id.tv_times);
         bt_update = findViewById(R.id.bt_update);
         bt_call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PhoneUtil.callPhone(MainActivity.this, tv_num.getText().toString());
+                PhoneUtils.callPhone(MainActivity.this, tv_num.getText().toString());
                 CallActivity.sCall_op = CallActivity.CALL_OP.AUTO_CALL;
             }
         });
@@ -93,27 +108,63 @@ public class MainActivity extends AppCompatActivity {
         bt_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tv_times.setText("当前设置拨打次数：" + PhoneUtil.getCallTimes());
+                tv_times.setText("当前设置拨打次数：" + PhoneUtils.getCallTimes());
             }
         });
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        sp_times.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String result = parent.getItemAtPosition(position).toString();
-                PhoneUtil.setCallTimes(Integer.parseInt(result));
-                System.out.println(result);
+                PhoneUtils.setCallTimes(Integer.parseInt(result));
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                PhoneUtil.setCallTimes(0);
+                PhoneUtils.setCallTimes(0);
             }
         });
 
+        sp_acceptTime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String result = parent.getItemAtPosition(position).toString();
+                PhoneUtils.setAcceptTime(Integer.parseInt(result));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                PhoneUtils.setAcceptTime(3);
+            }
+        });
+
+        sp_callTime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String result = parent.getItemAtPosition(position).toString();
+                PhoneUtils.setCallTime(Integer.parseInt(result));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                PhoneUtils.setCallTime(3);
+            }
+        });
+
+        if (ServiceUtils.isServiceRunning(this, "com.lauchun.autoanswer.service.CallService")) {
+            tv_status.setText("自动接听状态：已开启");
+        }
+
 
         tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        mPermissionUtil = new PermissionUtil(this);
+        mSubscriptionManager =
+                (SubscriptionManager) getApplicationContext().getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE);
+        mPermissionUtils = new PermissionUtils(this);
+        int phoneId = 1;
+        int[] subIds = mSubscriptionManager.getSubscriptionIds(phoneId);
+        for (int subId : subIds) {
+            Log.i("lzzz"," subId=" + subId);
+        }
         bindViews();
     }
 
@@ -121,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if (mPermissionUtil.checkPermissions(PERMISSIONS)) {
+        if (mPermissionUtils.checkPermissions(PERMISSIONS)) {
             startPermissionsActivity();
         }
     }
@@ -142,6 +193,8 @@ public class MainActivity extends AppCompatActivity {
     private void bindViews() {
         tv_phone = findViewById(R.id.tv_phone);
         info = new StringBuilder();
+
+
         try {
             info.append("手机类型：" + this.phoneType[tManager.getPhoneType()]);
             info.append("\n运营商代号：" + tManager.getNetworkOperator());
@@ -149,8 +202,17 @@ public class MainActivity extends AppCompatActivity {
             info.append("\n网络类型：" + this.dataType[tManager.getNetworkType()]);
             info.append("\n手机号码：" + tManager.getLine1Number());
             info.append("\nSIM卡的国别：" + tManager.getSimCountryIso().toUpperCase());
+            List<SubscriptionInfo> infoList =
+                    mSubscriptionManager.getActiveSubscriptionInfoList();
             info.append("\nSIM卡状态：" + this.simState[tManager.getSimState()]);
-            System.out.println("------------网络类型：" + tManager.getNetworkType());
+            if (infoList != null) {
+                for (SubscriptionInfo mInfo : infoList) {
+                    System.out.println(mInfo);
+                }
+            }
+            boolean b = tManager.setLine1NumberForDisplay("中国联通", "1113");
+            System.out.println("setLine1NumberForDisplay: " + b);
+
         } catch (Exception e) {
             System.out.println("———————————————————————开始Log———————————————————————");
             e.printStackTrace();

@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 
-import com.lauchun.autoanswer.utils.PermissionUtil;
+import com.lauchun.autoanswer.utils.PermissionUtils;
 
 public class PermissionsActivity extends AppCompatActivity {
 
@@ -18,7 +18,7 @@ public class PermissionsActivity extends AppCompatActivity {
     private static final String PACKAGE_URL_SCHEME = "package:";
 
 
-    private PermissionUtil permissionUtil;
+    private PermissionUtils permissionUtils;
     private boolean isRequireCheck;
 
     @Override
@@ -29,7 +29,7 @@ public class PermissionsActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_permissions);
 
-        permissionUtil = new PermissionUtil(this);
+        permissionUtils = new PermissionUtils(this);
         isRequireCheck = true;
     }
 
@@ -44,7 +44,7 @@ public class PermissionsActivity extends AppCompatActivity {
         super.onResume();
         if (isRequireCheck) {
             String[] permissions = getPermissions();
-            if (permissionUtil.checkPermissions(permissions)) {
+            if (permissionUtils.checkPermissions(permissions)) {
                 requestPermissions(permissions);
             } else {
                 allPermissionsGranted();

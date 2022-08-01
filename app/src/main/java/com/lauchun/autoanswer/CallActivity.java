@@ -3,7 +3,6 @@ package com.lauchun.autoanswer;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.WindowManager;
 
 /**
  * @author ：lauchun
@@ -25,4 +24,5 @@ public class CallActivity extends Activity {
     }
 
     public static CALL_OP sCall_op = CALL_OP.NONE;
+
 }
